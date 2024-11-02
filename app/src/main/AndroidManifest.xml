@@ -13,12 +13,17 @@
         android:theme="@style/Theme.APO"
         tools:targetApi="31">
         <activity
+            android:name=".SobreActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/AppCompat.TelaCheia"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppCompat.TelaCheia">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
