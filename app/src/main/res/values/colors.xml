@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#DC1515</color>
+    <color name="TapRed">#F23E3E</color>
 </resources>
