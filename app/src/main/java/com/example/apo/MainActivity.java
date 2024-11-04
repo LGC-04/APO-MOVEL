@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        vpAdapter.addFragment(new Lista(), "LISTA");
         vpAdapter.addFragment(new Mapa(), "MAPA");
-        vpAdapter.addFragment(new Lista(), "Lista");
         viewPager.setAdapter(vpAdapter);
     }
 }
