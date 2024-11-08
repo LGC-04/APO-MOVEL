@@ -36,12 +36,16 @@ android {
 
 dependencies {
 
+    implementation("com.android.volley:volley:1.2.1")
     implementation("org.osmdroid:osmdroid-android:6.1.20")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
+    implementation ("com.google.zxing:core:3.3.0")
+    implementation("androidx.activity:activity-ktx:1.4.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

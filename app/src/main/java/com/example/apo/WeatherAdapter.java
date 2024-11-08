@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -13,41 +12,64 @@ import java.util.List;
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHolder> {
     private List<WeatherData> weatherList;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView cityName;
-        public TextView temperature;
-        public TextView weatherDescription;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            cityName = itemView.findViewById(R.id.tvCityName);
-            temperature = itemView.findViewById(R.id.tvTemperature);
-            weatherDescription = itemView.findViewById(R.id.tvWeatherDescription);
-        }
-    }
-
     public WeatherAdapter(List<WeatherData> weatherList) {
         this.weatherList = weatherList;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_weather, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_weather, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WeatherData currentWeather = weatherList.get(position);
-        holder.cityName.setText(currentWeather.getCityName());
-        holder.temperature.setText(currentWeather.getTemperature() + " °C");
-        holder.weatherDescription.setText(currentWeather.getWeatherDescription());
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        WeatherData weatherData = weatherList.get(position);
+
+        // Exibe o nome da cidade apenas para a previsão do dia atual (posição 0)
+        if (position == 0) {
+            holder.cityTextView.setVisibility(View.VISIBLE);
+            holder.cityTextView.setText(weatherData.getCidade());
+        } else {
+            holder.cityTextView.setVisibility(View.GONE);
+        }
+
+        // Preenchendo os outros dados
+        holder.dateTextView.setText(weatherData.getData());
+        holder.tempTextView.setText(weatherData.getTemperatura());
+        holder.descriptionTextView.setText(weatherData.getDescricao());
+
+        holder.humidityTextView.setText("Umidade: " + weatherData.getHumidade());
+        holder.cloudinessTextView.setText("Nuvens: " + weatherData.getCloudiness());
+        holder.rainTextView.setText("Chuva: " + weatherData.getChuva());
+        holder.windSpeedTextView.setText("Vento: " + weatherData.getVento());
     }
 
     @Override
     public int getItemCount() {
         return weatherList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView cityTextView;
+        TextView dateTextView;
+        TextView descriptionTextView;
+        TextView tempTextView;
+        TextView humidityTextView;
+        TextView cloudinessTextView;
+        TextView rainTextView;
+        TextView windSpeedTextView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            cityTextView = itemView.findViewById(R.id.city_text_view);
+            dateTextView = itemView.findViewById(R.id.date_text_view);
+            descriptionTextView = itemView.findViewById(R.id.description_text_view);
+            tempTextView = itemView.findViewById(R.id.temp_text_view);
+            humidityTextView = itemView.findViewById(R.id.humidity_text_view);
+            cloudinessTextView = itemView.findViewById(R.id.cloudiness_text_view);
+            rainTextView = itemView.findViewById(R.id.rain_text_view);
+            windSpeedTextView = itemView.findViewById(R.id.wind_speed_text_view);
+        }
     }
 }
