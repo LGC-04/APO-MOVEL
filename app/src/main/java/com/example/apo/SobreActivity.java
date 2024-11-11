@@ -25,7 +25,6 @@ public class SobreActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.principal) {
-            // Ação para Item 1
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             Toast.makeText(this, "Você selecionou Sobre", Toast.LENGTH_SHORT).show();

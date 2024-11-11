@@ -32,7 +32,6 @@ public class Mapa extends Fragment {
     private String lon = "-46.6333";
     private String cidade = "São Paulo";
 
-    // Declarar o ActivityResultLauncher
     private ActivityResultLauncher<Intent> qrCodeLauncher;
 
     @Nullable
@@ -40,29 +39,23 @@ public class Mapa extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        // Carrega as configurações do osmdroid
         Configuration.getInstance().load(getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()));
 
-        // Infla o layout do fragmento
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         map = view.findViewById(R.id.mapa);
 
-        // Configurações do mapa
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        // Restaura a localização se houver estado salvo
         if (savedInstanceState != null) {
             lat = savedInstanceState.getString("latitude", lat);
             lon = savedInstanceState.getString("longitude", lon);
             cidade = savedInstanceState.getString("cidade", cidade);
         }
 
-        // Definindo a localização inicial do mapa
         updateMap(Double.parseDouble(lat), Double.parseDouble(lon));
 
-        // Inicializa o ActivityResultLauncher
         qrCodeLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -79,7 +72,6 @@ public class Mapa extends Fragment {
                     }
                 });
 
-        // Configurar o FloatingActionButton
         view.findViewById(R.id.fab).setOnClickListener(v -> {
             IntentIntegrator integrator = new IntentIntegrator(getActivity());
             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
@@ -87,7 +79,7 @@ public class Mapa extends Fragment {
             integrator.setCameraId(0);  // Use a câmera padrão
             integrator.setBeepEnabled(false);
             integrator.setBarcodeImageEnabled(true);
-            qrCodeLauncher.launch(integrator.createScanIntent()); // Use o launcher para iniciar a atividade
+            qrCodeLauncher.launch(integrator.createScanIntent());
         });
 
         return view;
@@ -98,25 +90,22 @@ public class Mapa extends Fragment {
         map.getController().setZoom(15);
         map.getController().setCenter(startPoint);
 
-        // Remover todos os marcadores existentes (opcional)
         map.getOverlays().clear();
 
-        // Adicionando um novo marcador
         Marker marker = new Marker(map);
         marker.setPosition(startPoint);
-        marker.setTitle(cidade); // Usar a variável cidade atualizada
+        marker.setTitle(cidade);
         map.getOverlays().add(marker);
 
-        // Atualiza o mapa para refletir as mudanças
         map.invalidate();
     }
 
     public void atualizarLocalizacao(String novaCidade, String novaLatitude, String novaLongitude) {
         this.cidade = novaCidade;
-        this.lat = novaLatitude; // Atualiza a latitude
-        this.lon = novaLongitude; // Atualiza a longitude
+        this.lat = novaLatitude;
+        this.lon = novaLongitude;
 
-        updateMap(Double.parseDouble(lat), Double.parseDouble(lon)); // Atualiza o mapa com as novas coordenadas
+        updateMap(Double.parseDouble(lat), Double.parseDouble(lon));
     }
 
     @Override
@@ -135,7 +124,6 @@ public class Mapa extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Salvar o estado atual das variáveis de localização e cidade
         outState.putString("latitude", lat);
         outState.putString("longitude", lon);
         outState.putString("cidade", cidade);
@@ -149,12 +137,10 @@ public class Mapa extends Fragment {
             String longitude = jsonObject.getString("longitude");
             String woeid = jsonObject.getString("woeid");
 
-            // Atualizando as variáveis na classe de mapa
             atualizarLocalizacao(cidade, latitude, longitude);
 
-            // Usando o ViewModel para atualizar o WOEID
             WeatherViewModel weatherViewModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
-            weatherViewModel.setWoeid(woeid); // Atualiza o WOEID no ViewModel
+            weatherViewModel.setWoeid(woeid);
 
         } catch (JSONException e) {
             Toast.makeText(getContext(), "Erro ao processar o QR Code: " + e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -10,7 +10,6 @@ public class WeatherData {
     private String vento;
     private String descricao;
 
-    // Construtor
     public WeatherData(String cidade, String data, String temperatura, String humidade,
                        String cloudiness, String chuva, String vento, String descricao) {
         this.cidade = cidade;
@@ -23,7 +22,6 @@ public class WeatherData {
         this.descricao = descricao;
     }
 
-    // Getters
     public String getCidade() { return cidade; }
     public String getData() { return data; }
     public String getTemperatura() { return temperatura; }

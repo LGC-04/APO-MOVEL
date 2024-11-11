@@ -32,7 +32,7 @@ public class Lista extends Fragment {
     private RecyclerView recyclerView;
     private WeatherAdapter adapter;
     private List<WeatherData> weatherDataList;
-    private WeatherViewModel weatherViewModel; // Adicionando o ViewModel
+    private WeatherViewModel weatherViewModel;
 
     @Nullable
     @Override
@@ -44,20 +44,19 @@ public class Lista extends Fragment {
 
         weatherDataList = new ArrayList<>();
 
-        // Inicializando o ViewModel
+
         weatherViewModel = new ViewModelProvider(requireActivity()).get(WeatherViewModel.class);
 
-        // Observando mudanças no WOEID
+
         weatherViewModel.getWoeid().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String novoWoeid) {
                 if (novoWoeid != null) {
-                    loadWeatherData(novoWoeid); // Carregar dados da API se woeid não for nulo
+                    loadWeatherData(novoWoeid);
                 }
             }
         });
 
-        // Carregar dados com um WOEID padrão se não houver nenhum definido
         if (weatherViewModel.getWoeid().getValue() == null) {
             weatherViewModel.setWoeid("455827");
         }
@@ -67,7 +66,7 @@ public class Lista extends Fragment {
 
     private void loadWeatherData(String woeid) {
         OkHttpClient client = new OkHttpClient();
-        String url = "https://api.hgbrasil.com/weather?woeid=" + woeid; // URL da API
+        String url = "https://api.hgbrasil.com/weather?woeid=" + woeid;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -83,7 +82,7 @@ public class Lista extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
-                    parseWeatherData(responseBody); // Chama o método não estático
+                    parseWeatherData(responseBody);
                 }
             }
         });
@@ -94,41 +93,37 @@ public class Lista extends Fragment {
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonObject resultsObject = jsonObject.getAsJsonObject("results");
 
-        // Extraindo o nome da cidade
+
         String cityName = resultsObject.get("city").getAsString();
 
-        // Extraindo a previsão do tempo
+
         JsonArray forecastArray = resultsObject.getAsJsonArray("forecast");
 
-        // Limpar a lista antes de adicionar novos dados
         weatherDataList.clear();
 
         for (int i = 0; i < forecastArray.size(); i++) {
             JsonObject forecastObject = forecastArray.get(i).getAsJsonObject();
 
             String date = forecastObject.get("date").getAsString();
-            String temperature = forecastObject.get("max").getAsString() + "°C"; // Usando a temperatura máxima
+            String temperature = forecastObject.get("max").getAsString() + "°C";
             String weatherDescription = forecastObject.get("description").getAsString();
             String humidity = forecastObject.get("humidity").getAsString() + "%";
             String cloudiness = forecastObject.get("cloudiness").getAsString() + "%";
             String rain = forecastObject.get("rain").getAsString() + " mm";
             String windSpeed = forecastObject.get("wind_speedy").getAsString();
 
-            // Criando um novo objeto WeatherData para cada dia
             WeatherData weatherData = new WeatherData(cityName, date, temperature,
                     humidity, cloudiness, rain, windSpeed, weatherDescription);
 
-            // Adicionando à lista
             weatherDataList.add(weatherData);
         }
 
-        // Atualizando a interface do usuário na thread principal
         getActivity().runOnUiThread(() -> {
-            if (adapter == null) {  // Verifica se o adaptador ainda não foi inicializado
+            if (adapter == null) {
                 adapter = new WeatherAdapter(weatherDataList);
-                recyclerView.setAdapter(adapter);  // Configura o adaptador na RecyclerView
+                recyclerView.setAdapter(adapter);
             } else {
-                adapter.notifyDataSetChanged();  // Notifica que os dados mudaram
+                adapter.notifyDataSetChanged();
             }
         });
     }

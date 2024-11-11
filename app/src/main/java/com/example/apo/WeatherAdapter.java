@@ -26,7 +26,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         WeatherData weatherData = weatherList.get(position);
 
-        // Exibe o nome da cidade apenas para a previsão do dia atual (posição 0)
         if (position == 0) {
             holder.cityTextView.setVisibility(View.VISIBLE);
             holder.cityTextView.setText(weatherData.getCidade());
@@ -34,7 +33,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
             holder.cityTextView.setVisibility(View.GONE);
         }
 
-        // Preenchendo os outros dados
         holder.dateTextView.setText(weatherData.getData());
         holder.tempTextView.setText(weatherData.getTemperatura());
         holder.descriptionTextView.setText(weatherData.getDescricao());
